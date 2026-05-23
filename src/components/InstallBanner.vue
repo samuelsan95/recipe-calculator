@@ -50,7 +50,7 @@
 </template>
 
 <script setup>
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, onUnmounted } from 'vue'
 import AppButton from './AppButton.vue'
 
 const showBanner = ref(false)
@@ -59,6 +59,21 @@ const showInstallHint = ref(false)
 const deferredPrompt = ref(null)
 const isIOS = ref(false)
 
+function handleBeforeInstallPrompt(e) {
+  e.preventDefault()
+  deferredPrompt.value = e
+  showBanner.value = true
+}
+
+function handleSwUpdated() {
+  showUpdate.value = true
+}
+
+function handleAppInstalled() {
+  showBanner.value = false
+  deferredPrompt.value = null
+}
+
 onMounted(() => {
   isIOS.value = /iPad|iPhone|iPod/.test(navigator.userAgent)
 
@@ -66,26 +81,21 @@ onMounted(() => {
     return
   }
 
-  window.addEventListener('beforeinstallprompt', (e) => {
-    e.preventDefault()
-    deferredPrompt.value = e
-    showBanner.value = true
-  })
-
-  window.addEventListener('swUpdated', () => {
-    showUpdate.value = true
-  })
-
-  window.addEventListener('appinstalled', () => {
-    showBanner.value = false
-    deferredPrompt.value = null
-  })
+  window.addEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+  window.addEventListener('swUpdated', handleSwUpdated)
+  window.addEventListener('appinstalled', handleAppInstalled)
 
   setTimeout(() => {
     if (!showBanner.value && !isIOS.value) {
       showInstallHint.value = true
     }
   }, 2000)
+})
+
+onUnmounted(() => {
+  window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
+  window.removeEventListener('swUpdated', handleSwUpdated)
+  window.removeEventListener('appinstalled', handleAppInstalled)
 })
 
 async function install() {
