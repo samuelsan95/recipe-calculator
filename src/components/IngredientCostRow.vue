@@ -62,7 +62,12 @@ const props = defineProps({
 
 const emit = defineEmits(['update:ingredientId', 'update:quantity', 'remove', 'newIngredient'])
 
-const { ingredients, getIngredient } = inject(ingredientStoreKey)
+const { ingredients: ingredientsRef, getIngredient } = inject(ingredientStoreKey, {
+  ingredients: ref([]),
+  getIngredient: () => null
+})
+
+const ingredients = computed(() => ingredientsRef.value || [])
 
 const localIngredientId = computed({
   get: () => props.ingredientId,
@@ -75,7 +80,7 @@ const localQuantity = computed({
 })
 
 const ingredientOptions = computed(() =>
-  ingredients.map(i => ({ value: i.id, label: i.name }))
+  ingredients.value.map(i => ({ value: i.id, label: i.name }))
 )
 
 const ingredientData = computed(() => getIngredient(props.ingredientId))
