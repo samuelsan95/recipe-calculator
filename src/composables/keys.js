@@ -1,0 +1,1 @@
+export const ingredientStoreKey = Symbol('ingredient-store')

@@ -47,22 +47,22 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, inject } from 'vue'
 import AppCard from './AppCard.vue'
 import AppInput from './AppInput.vue'
 import AppSelect from './AppSelect.vue'
 import AppButton from './AppButton.vue'
+import { ingredientStoreKey } from '../composables/keys'
 
 const props = defineProps({
   label: { type: String, default: 'Ingrediente' },
-  ingredientId: { type: String, default: '' },
-  quantity: { type: Number, default: 0 },
-  ingredients: { type: Array, default: () => [] },
-  getIngredient: { type: Function, required: true },
-  calculateCost: { type: Function, required: true }
+  ingredientId: { type: String, default: null },
+  quantity: { type: Number, default: 0 }
 })
 
 const emit = defineEmits(['update:ingredientId', 'update:quantity', 'remove', 'newIngredient'])
+
+const { ingredients, getIngredient } = inject(ingredientStoreKey)
 
 const localIngredientId = computed({
   get: () => props.ingredientId,
@@ -75,10 +75,15 @@ const localQuantity = computed({
 })
 
 const ingredientOptions = computed(() =>
-  props.ingredients.map(i => ({ value: i.id, label: i.name }))
+  ingredients.map(i => ({ value: i.id, label: i.name }))
 )
 
-const ingredientData = computed(() => props.getIngredient(props.ingredientId))
+const ingredientData = computed(() => getIngredient(props.ingredientId))
 
-const cost = computed(() => props.calculateCost(props.ingredientId, props.quantity))
+const cost = computed(() => {
+  if (!ingredientData.value) return 0
+  if (!props.quantity || !ingredientData.value.packagePrice) return 0
+  const calculated = (props.quantity / ingredientData.value.packageQuantity) * ingredientData.value.packagePrice
+  return Math.round(calculated * 100) / 100
+})
 </script>
