@@ -1,55 +1,55 @@
 # Recipe Calculator
 
-PWA para calcular el coste de recetas de tartas.
+PWA for calculating the cost of cake and pastry recipes.
 
-> Desarrollada con [opencode](https://opencode.ai) usando el modelo **minimax 2.7**.
+> Developed with [opencode](https://opencode.ai) using the **minimax 2.7** model.
 
-## Stack tecnológico
+## Tech Stack
 
-| Categoría | Tecnología |
+| Category | Technology |
 |----------|------------|
 | Framework | Vue 3 (Composition API) |
 | Build tool | Vite |
-| Estilos | Tailwind CSS |
+| Styling | Tailwind CSS |
 | PWA | vite-plugin-pwa |
-| IA | opencode + minimax 2.7 |
+| AI | opencode + minimax 2.7 |
 
-## Funcionalidades
+## Features
 
-- **Gestión de ingredientes**: Añade ingredientes con cantidad de paquete, unidad y precio
-- **Cálculo de costes**: Calcula automáticamente el coste de cada receta
-- **Copiar recetas**: Duplica recetas existentes para crear variantes
-- **PWA**: Funciona sin conexión, instalable en móvil
-- **Auto-update**: Detecta nuevas versiones cuando vuelves a la app
+- **Ingredient management**: Add ingredients with package quantity, unit and price
+- **Cost calculation**: Automatically calculates recipe costs
+- **Copy recipes**: Duplicate existing recipes to create variations
+- **PWA**: Works offline, installable on mobile
+- **Auto-update**: Detects new versions when returning to the app
 
-## Desarrollo
+## Development
 
 ```bash
 npm install
 npm run dev
 ```
 
-## Despliegue en GitHub Pages
+## Deploy to GitHub Pages
 
 ```bash
 npm run deploy
 ```
 
-## Uso
+## Usage
 
-1. **Ingredientes**: Ve a "Ingredientes" y añade los que usas habitualmente
-2. **Recetas**: Crea una receta, selecciona ingredientes e indica las cantidades
-3. **Coste**: Se calcula automáticamente con la regla de 3 simple
-4. **Copiar**: Usa el botón "Copiar" para duplicar una receta como base
+1. **Ingredients**: Go to "Ingredientes" and add your frequently used ingredients
+2. **Recipes**: Create a recipe, select ingredients and specify quantities
+3. **Cost**: Automatically calculated using simple ratio (rule of three)
+4. **Copy**: Use the "Copiar" button to duplicate a recipe as a base
 
-## Instalación PWA
+## PWA Installation
 
 ### iOS
-Safari → Compartir → "Añadir a pantalla de inicio"
+Safari → Share → "Add to Home Screen"
 
 ### Android
-Menú (⋮) → "Instalar aplicación" o "Añadir a pantalla de inicio"
+Menu (⋮) → "Install app" or "Add to Home Screen"
 
 ---
 
-Los datos se guardan en `localStorage` del navegador.
+Data is stored in the browser's `localStorage`.
