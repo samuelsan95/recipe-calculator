@@ -24,7 +24,7 @@
               {{ recipe.size }}
             </span>
           </div>
-          <p class="text-lg font-bold text-primary-600">{{ calculateRecipeTotal(recipe).toFixed(2) }}€</p>
+          <p class="text-lg font-bold text-primary-600">{{ getRecipeCost(recipe).toFixed(2) }}€</p>
         </div>
         <p class="text-sm text-gray-500 mt-2">{{ recipe.ingredients.length }} ingrediente{{ recipe.ingredients.length !== 1 ? 's' : '' }}</p>
         <div class="flex gap-2 mt-3 pt-3 border-t border-gray-100">
@@ -49,6 +49,7 @@
 <script setup>
 import { ref, computed } from 'vue'
 import { useRecipeStore } from '../stores/recipeStore'
+import { useIngredientStore } from '../stores/ingredientStore'
 import AppPageHeader from '../components/AppPageHeader.vue'
 import AppCard from '../components/AppCard.vue'
 import AppButton from '../components/AppButton.vue'
@@ -56,6 +57,7 @@ import AppEmptyState from '../components/AppEmptyState.vue'
 import AppConfirmDialog from '../components/AppConfirmDialog.vue'
 
 const { recipes, deleteRecipe, calculateRecipeTotal } = useRecipeStore()
+const { getIngredient } = useIngredientStore()
 
 const showDeleteConfirm = ref(false)
 const recipeToDelete = ref(null)
@@ -75,5 +77,9 @@ function handleDelete() {
   }
   showDeleteConfirm.value = false
   recipeToDelete.value = null
+}
+
+function getRecipeCost(recipe) {
+  return calculateRecipeTotal(recipe, getIngredient)
 }
 </script>

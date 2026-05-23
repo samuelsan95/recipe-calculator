@@ -1,5 +1,4 @@
 import { ref } from 'vue'
-import { useIngredientStore } from './ingredientStore'
 
 const STORAGE_KEY = 'recipe-calculator-recipes'
 
@@ -45,14 +44,14 @@ export function useRecipeStore() {
 
   function calculateIngredientCost(recipeIngredient, ingredientData) {
     if (!ingredientData || !recipeIngredient.quantity || !ingredientData.packagePrice) return 0
-    
+
     const cost = (recipeIngredient.quantity / ingredientData.packageQuantity) * ingredientData.packagePrice
     return Math.round(cost * 100) / 100
   }
 
-  function calculateRecipeTotal(recipe) {
-    const { getIngredient } = useIngredientStore()
-    
+  function calculateRecipeTotal(recipe, getIngredient) {
+    if (!getIngredient) return 0
+
     return recipe.ingredients.reduce((total, recipeIngredient) => {
       const ingredientData = getIngredient(recipeIngredient.ingredientId)
       return total + calculateIngredientCost(recipeIngredient, ingredientData)
