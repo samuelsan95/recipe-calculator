@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -29,7 +29,7 @@ const props = defineProps({
   step: { type: [String, Number], default: undefined },
   min: { type: [String, Number], default: undefined },
   size: { type: String, default: 'md', validator: (v) => ['sm', 'md'].includes(v) },
-  id: { type: String, default: () => `input-${Math.random().toString(36).slice(2, 9)}` }
+  id: { type: String, default: () => `input-${useId()}` }
 })
 
 defineEmits(['update:modelValue'])

@@ -19,7 +19,7 @@
 </template>
 
 <script setup>
-import { computed } from 'vue'
+import { computed, useId } from 'vue'
 
 const props = defineProps({
   modelValue: { type: [String, Number], default: '' },
@@ -28,7 +28,7 @@ const props = defineProps({
   required: { type: Boolean, default: false },
   options: { type: Array, default: () => [] },
   size: { type: String, default: 'md', validator: (v) => ['sm', 'md'].includes(v) },
-  id: { type: String, default: () => `select-${Math.random().toString(36).slice(2, 9)}` }
+  id: { type: String, default: () => `select-${useId()}` }
 })
 
 defineEmits(['update:modelValue'])
