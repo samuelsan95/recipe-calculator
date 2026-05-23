@@ -1,6 +1,13 @@
 # Recipe Calculator
 
-PWA para calcular el coste de recetas de tartas. Hecha con Vue 3 + Vite + Tailwind CSS.
+PWA para calcular el coste de recetas de tartas. Desarrollada con Vue 3 + Vite + Tailwind CSS.
+
+## Tecnologías
+
+- **Frontend**: Vue 3 (Composition API) + Vite
+- **Estilos**: Tailwind CSS
+- **Modelo IA**: [opencode](https://opencode.ai) con modelo **minimax 2.7**
+- **PWA**: Service Worker con vite-plugin-pwa
 
 ## Desarrollo
 
@@ -35,6 +42,15 @@ npm run deploy
 
 1. **Ingredientes**: Añade primero los ingredientes que usas habitualmente (nombre, cantidad del paquete, unidad y precio)
 2. **Recetas**: Crea recetas seleccionando ingredientes del almacén e indicando la cantidad que usa cada uno
-3. El coste se calcula automáticamente con la regla de 3
+3. **Copiar**: Duplica recetas existentes como base para crear variantes
+4. El coste se calcula automáticamente con la regla de 3
 
 Los datos se guardan en `localStorage` del navegador.
+
+## Instalación como PWA
+
+La app funciona sin conexión. En dispositivos móviles:
+- **iOS**: Safari → Compartir → Añadir a pantalla de inicio
+- **Android**: Menú (⋮) → "Instalar aplicación" o "Añadir a pantalla de inicio"
+
+Al tenerla instalada, los cambios se detectan automáticamente cuando vuelves a la app.
