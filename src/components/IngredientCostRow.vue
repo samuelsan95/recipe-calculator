@@ -47,7 +47,7 @@
 </template>
 
 <script setup>
-import { computed, inject } from 'vue'
+import { ref, computed, inject } from 'vue'
 import AppCard from './AppCard.vue'
 import AppInput from './AppInput.vue'
 import AppSelect from './AppSelect.vue'
