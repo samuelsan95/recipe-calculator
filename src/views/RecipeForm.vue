@@ -39,9 +39,6 @@
             :label="`Ingrediente ${index + 1}`"
             :ingredient-id="ing.ingredientId"
             :quantity="ing.quantity"
-            :ingredients="ingredients"
-            :get-ingredient="getIngredient"
-            :calculate-cost="calculateRowCost"
             @update:ingredient-id="ing.ingredientId = $event"
             @update:quantity="ing.quantity = $event"
             @remove="removeIngredient(index)"
@@ -67,10 +64,11 @@
 </template>
 
 <script setup>
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, watch, provide } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRecipeStore } from '../stores/recipeStore'
 import { useIngredientStore } from '../stores/ingredientStore'
+import { ingredientStoreKey } from '../composables/keys'
 import AppPageHeader from '../components/AppPageHeader.vue'
 import AppCard from '../components/AppCard.vue'
 import AppInput from '../components/AppInput.vue'
@@ -84,6 +82,8 @@ const router = useRouter()
 const { getRecipe, addRecipe, updateRecipe, calculateIngredientCost } = useRecipeStore()
 const { ingredients, getIngredient, addIngredient: addNewIngredient } = useIngredientStore()
 
+provide(ingredientStoreKey, { ingredients, getIngredient })
+
 const isEditing = computed(() => !!route.params.id)
 const sizes = ['pequeña', 'mediana', 'grande']
 
@@ -96,21 +96,29 @@ const form = ref({
   ingredients: []
 })
 
-onMounted(() => {
+function loadRecipe() {
   if (isEditing.value) {
     const recipe = getRecipe(route.params.id)
     if (recipe) {
       form.value = {
         name: recipe.name,
         size: recipe.size,
-        ingredients: [...recipe.ingredients.map(i => ({ ...i }))]
+        ingredients: recipe.ingredients.map(i => ({ ...i }))
       }
     }
   }
-})
+}
+
+watch(() => route.params.id, (id) => {
+  if (id) {
+    loadRecipe()
+  } else {
+    form.value = { name: '', size: 'mediana', ingredients: [] }
+  }
+}, { immediate: true })
 
 function addIngredient() {
-  form.value.ingredients.push({ ingredientId: '', quantity: 0 })
+  form.value.ingredients.push({ ingredientId: null, quantity: 0 })
 }
 
 function removeIngredient(index) {
