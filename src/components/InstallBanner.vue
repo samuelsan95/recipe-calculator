@@ -74,10 +74,33 @@ function handleAppInstalled() {
   deferredPrompt.value = null
 }
 
+function handleVisibilityChange() {
+  if (document.visibilityState === 'visible') {
+    checkForUpdates()
+  }
+}
+
+function handleWindowFocus() {
+  checkForUpdates()
+}
+
+async function checkForUpdates() {
+  try {
+    const registration = await navigator.serviceWorker?.getRegistration()
+    if (registration?.waiting) {
+      showUpdate.value = true
+    }
+  } catch {
+  }
+}
+
 onMounted(() => {
   isIOS.value = /iPad|iPhone|iPod/.test(navigator.userAgent)
 
   if (window.matchMedia('(display-mode: standalone)').matches) {
+    document.addEventListener('visibilitychange', handleVisibilityChange)
+    window.addEventListener('focus', handleWindowFocus)
+    checkForUpdates()
     return
   }
 
@@ -96,6 +119,8 @@ onUnmounted(() => {
   window.removeEventListener('beforeinstallprompt', handleBeforeInstallPrompt)
   window.removeEventListener('swUpdated', handleSwUpdated)
   window.removeEventListener('appinstalled', handleAppInstalled)
+  document.removeEventListener('visibilitychange', handleVisibilityChange)
+  window.removeEventListener('focus', handleWindowFocus)
 })
 
 async function install() {
