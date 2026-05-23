@@ -38,6 +38,22 @@ export function useRecipeStore() {
     save()
   }
 
+  function copyRecipe(id) {
+    const recipe = getRecipe(id)
+    if (!recipe) return null
+
+    const copiedRecipe = {
+      id: Date.now().toString(),
+      createdAt: new Date().toISOString(),
+      name: `${recipe.name} (copia)`,
+      size: recipe.size,
+      ingredients: recipe.ingredients.map(i => ({ ...i }))
+    }
+    recipes.value.push(copiedRecipe)
+    save()
+    return copiedRecipe
+  }
+
   function getRecipe(id) {
     return recipes.value.find(r => r.id === id)
   }
@@ -63,6 +79,7 @@ export function useRecipeStore() {
     addRecipe,
     updateRecipe,
     deleteRecipe,
+    copyRecipe,
     getRecipe,
     calculateIngredientCost,
     calculateRecipeTotal

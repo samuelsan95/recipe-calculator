@@ -31,6 +31,7 @@
           <router-link :to="`/recipe/${recipe.id}/edit`" class="flex-1">
             <AppButton variant="secondary" size="sm" full-width>Editar</AppButton>
           </router-link>
+          <AppButton variant="secondary" size="sm" @click="handleCopy(recipe)">Copiar</AppButton>
           <AppButton variant="danger" size="sm" @click="confirmDelete(recipe)">Eliminar</AppButton>
         </div>
       </AppCard>
@@ -56,7 +57,7 @@ import AppButton from '../components/AppButton.vue'
 import AppEmptyState from '../components/AppEmptyState.vue'
 import AppConfirmDialog from '../components/AppConfirmDialog.vue'
 
-const { recipes, deleteRecipe, calculateRecipeTotal } = useRecipeStore()
+const { recipes, deleteRecipe, copyRecipe, calculateRecipeTotal } = useRecipeStore()
 const { getIngredient } = useIngredientStore()
 
 const showDeleteConfirm = ref(false)
@@ -81,5 +82,9 @@ function handleDelete() {
 
 function getRecipeCost(recipe) {
   return calculateRecipeTotal(recipe, getIngredient)
+}
+
+function handleCopy(recipe) {
+  copyRecipe(recipe.id)
 }
 </script>
