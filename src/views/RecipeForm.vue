@@ -32,7 +32,7 @@
 
         <AppEmptyState v-if="form.ingredients.length === 0" title="Añade ingredientes a la receta" />
 
-        <div v-else class="space-y-3">
+        <div v-else ref="ingredientsContainer" class="space-y-3">
           <IngredientCostRow
             v-for="(ing, index) in form.ingredients"
             :key="index"
@@ -64,7 +64,7 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, provide } from 'vue'
+import { ref, computed, watch, provide, nextTick } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import { useRecipeStore } from '../stores/recipeStore'
 import { useIngredientStore } from '../stores/ingredientStore'
@@ -117,8 +117,17 @@ watch(() => route.params.id, (id) => {
   }
 }, { immediate: true })
 
+const ingredientsContainer = ref(null)
+
 function addIngredient() {
   form.value.ingredients.push({ ingredientId: null, quantity: 0 })
+  nextTick(() => {
+    const container = ingredientsContainer.value
+    if (container) {
+      const lastChild = container.lastElementChild
+      lastChild?.scrollIntoView({ behavior: 'smooth', block: 'center' })
+    }
+  })
 }
 
 function removeIngredient(index) {
